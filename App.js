@@ -1,87 +1,119 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, Image, Button } from 'react-native';
-// import { Button } from "../../../Library/Caches/typescript/2.6/node_modules/@types/react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  AsyncStorage,
+  Button,
+  TextInput,
+  Keyboard,
+  Platform
+} from "react-native";
 
-class Names extends Component {
+const viewPadding = 10;
+
+
+export default class ContactBook extends Component {
+  render () {
+    return (
+      <View>
+        <Text>My Contact Book</Text>
+        <NewContact />
+        <ContactList />
+      </View>
+    );
+  }
+};
+
+
+class NewContact extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      text: "",
+      contacts: []
+    };
+    this.addContact = this.addContact.bind(this);
+    this.handleInput = this.handleInput.bind(this);
+  };
+
+  handleInput(text) {
+    this.setState({ text: text });
+  };
+
+  addContact() {
+    let notEmpty = this.state.text.trim().length > 0;
+
+    if (notEmpty) {
+      this.setState({text: this.state.text + this.state.contacts});
+      // this.setState(
+      //   prevState => {
+      //     let { contacts, text } = prevState;
+      //     return {
+      //       contacts: contacts.concat({ key: contacts.length, text: text }),
+      //       text: ''
+      //     };
+      //   },
+      //   () => Tasks.save(this.state.tasks)
+      // );
+    }
+  };
+
   render() {
     return (
-        <Text>By {this.props.name}</Text>
+      <View style={{ padding: 10 }}>
+        <TextInput
+          style={{ height: 40 }}
+          placeholder="Add new contact here!"
+          onChangeText={this.handleInput}
+          onSubmitEditing={this.addContact}
+        />
+        {/* <Button title="Add" onPress={this.addContact} /> */}
+      </View>
     );
   }
 }
 
-class Counting extends Component {
+class ContactList extends Component {
   constructor(props) {
     super(props);
-    this.state = {count: 0};
-    this.handleClick = this.handleClick.bind(this);
+    this.state = {
+      text: "",
+      contacts: []
+    };
+    // this.addContact = this.addContact.bind(this);
   }
-  
-  handleClick() {
-    let preCount = this.state.count;
-    this.setState( {count: preCount+ 1});
-  }
-  
-    render(){
-      return <View>
-      <Button title="click me!" onPress={this.handleClick} />
-      <Text>{this.state.count}</Text>
-      </View>;
-    }
-}
-
-class Blink extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {showText: true};
-
-    setInterval(()=>{
-      this.setState(preState => {
-        return {showText: !preState.showText};
-      });
-    }, 1000)
-  }
-
   render() {
-    let display = this.state.showText ? this.props.msg : ' ';
-    return <Text style={[styles.bigblue, styles.red]}>{display}</Text>;
+    return (
+      <FlatList
+        style={{ padding: 10, fontSize: 42 }}
+        data={[{ key: this.state.contacts }]}
+        renderItem={({ item }) => <Text>{item.key}</Text>}
+      />
+    );
   }
 }
-export default class App extends Component {
-  render() {
-    let pic = { uri: "https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg" };
-    let giphy = { uri: "https://gph.is/29vyb0s" };
 
-    return <View style={styles.container}>
-        <Text>Welcome to React Native :) </Text>
-        <Image source={pic} style={{ width: 193, height: 110 }} />
-        {/* <View style={{flex:3, backgroundColor:'powderblue'}}> */}
-          <Names name="Xinyi" style={{backgroundColor:'powderblue'}}/>
-          <Names name="Frozen City Savages" style={{backgroundColor: 'steelblue'}}/>
-        {/* </View> */}
-        <Counting />
-        <Blink msg="blinking" />
-        <View style={styles.fixedSquare}/>
-      </View>;
-  }
-}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center"
   },
   bigblue: {
-    color:'blue',
+    color: "blue",
     fontSize: 30
   },
   red: {
-    color: 'red',
+    color: "red"
   },
-  fixedSquare: {
-    width: 50,
-    height: 50,
-    backgroundColor: 'skyblue'
+  item: {
+    padding: 10,
+    fontSize: 18,
+    height: 44
   }
 });
+
