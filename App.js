@@ -4,100 +4,186 @@ import {
   Text,
   View,
   FlatList,
-  AsyncStorage,
   Button,
   TextInput,
-  Keyboard,
-  Platform
 } from "react-native";
 
-const viewPadding = 10;
+export default class App extends Component {
+  render() {
+    return (
+      <View style={[styles.containerApp]}>
+        <Text>Hello 5117!</Text>
+      </View>
+    );
+  }
+}
 
+  // <View style={[styles.containerApp]}>
+  //   <Text style={[styles.bigblue, styles.red]}>Hello 5117</Text>
+  //   <Names name="xinyi" />
+  //   <Names name="Frozen city savages" />
+  //   <Counting />
+  // </View>;
 
-export default class ContactBook extends Component {
-  render () {
+// flex
+    // <View style={{ height: 200 }}>
+    //     <View style={{ flex: 1, backgroundColor: "powderblue" }} />
+    //     <View style={{ flex: 2, backgroundColor: "skyblue" }} />
+    //     <View style={{ flex: 3, backgroundColor: "steelblue" }} />
+    // </View>;
+
+// Props 
+class Names extends Component {
+  render() {
+    return <Text>By {this.props.name}</Text>;
+  }
+}
+
+// Props, state, touch (Button): onPress
+class Counting extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { count: 0 };
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick() {
+    let preCount = this.state.count;
+    this.setState({ count: preCount + 1 });
+  }
+
+  render() {
     return (
       <View>
-        <Text>My Contact Book</Text>
-        <NewContact />
-        <ContactList />
+        <Button title="click me!" onPress={this.handleClick} />
+        <Text>{this.state.count}</Text>
       </View>
     );
   }
-};
+}
 
-
-class NewContact extends Component {
+// Text input: onChangeText, onSubmitEditing 
+class UserInput extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      text: "",
-      contacts: []
-    };
-    this.addContact = this.addContact.bind(this);
-    this.handleInput = this.handleInput.bind(this);
-  };
+    this.state = {text: ''};
+  }
 
-  handleInput(text) {
-    this.setState({ text: text });
-  };
-
-  addContact() {
-    let notEmpty = this.state.text.trim().length > 0;
-
-    if (notEmpty) {
-      this.setState({text: this.state.text + this.state.contacts});
-      // this.setState(
-      //   prevState => {
-      //     let { contacts, text } = prevState;
-      //     return {
-      //       contacts: contacts.concat({ key: contacts.length, text: text }),
-      //       text: ''
-      //     };
-      //   },
-      //   () => Tasks.save(this.state.tasks)
-      // );
-    }
-  };
-
-  render() {
-    return (
-      <View style={{ padding: 10 }}>
+  render (){
+      return (
+      <View style={{padding: 10}}>
         <TextInput
-          style={{ height: 40 }}
-          placeholder="Add new contact here!"
-          onChangeText={this.handleInput}
-          onSubmitEditing={this.addContact}
+          style={{height: 40}}
+          placeholder="Type here to translate!"
+          onChangeText={(text) => this.setState({text})}
         />
-        {/* <Button title="Add" onPress={this.addContact} /> */}
+        <Text style={{padding: 10, fontSize: 42}}>
+          {this.state.text.split(' ').map((word) => word && '🍕').join(' ')}
+        </Text>
       </View>
-    );
-  }
-}
-
-class ContactList extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      text: "",
-      contacts: []
-    };
-    // this.addContact = this.addContact.bind(this);
-  }
-  render() {
-    return (
-      <FlatList
-        style={{ padding: 10, fontSize: 42 }}
-        data={[{ key: this.state.contacts }]}
-        renderItem={({ item }) => <Text>{item.key}</Text>}
-      />
-    );
+      );
   }
 }
 
 
+// export default class ContactBook extends Component {
+//   constructor(props){
+//     super(props);
+//     this.state = { 
+//       tasks: [], 
+//       text: "" 
+//     };
+//   }
+  
+//   handleInput = text => {
+//     this.setState({ text: text });
+//   };
+
+//   addContact = () => {
+//     this.setState({
+//       tasks: this.state.tasks.concat({ 
+//         key: this.state.tasks.length, 
+//         text: this.state.text 
+//       }),
+//       text: ""
+//     });
+//   };
+
+//   deleteContact = i => {
+//     this.state.tasks.splice(i, 1);
+//     this.setState({ tasks: this.state.tasks });
+//   };
+
+//   render() {
+//     return (
+//       <View
+//         style={[styles.container, { paddingBottom: this.state.viewMargin }]}
+//       >
+//         <TextInput
+//           style={styles.textInput}
+//           onChangeText={this.handleInput}
+//           onSubmitEditing={this.addContact}
+//           value={this.state.text}
+//           placeholder="Add a new contact!"
+//           returnKeyType="done"
+//           returnKeyLabel="done"
+//         />
+//         <FlatList
+//           style={styles.list}
+//           data={this.state.tasks}
+//           renderItem={({ item, index }) => (
+//             <View>
+//               <View style={styles.listItemCont}>
+//                 <Text style={styles.listItem}>{item.text}</Text>
+//                 <Button title="Delete" onPress={() => this.deleteContact(index)} />
+//               </View>
+//               <View style={styles.hr} />
+//             </View>
+//           )}
+//         />
+
+//       </View>
+//     );
+//   }
+// }
+
+
+
+const viewPadding = 10;
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#F5FCFF",
+    padding: viewPadding,
+    paddingTop: 20
+  },
+  list: {
+    width: "100%"
+  },
+  listItem: {
+    paddingTop: 2,
+    paddingBottom: 2,
+    fontSize: 18
+  },
+  hr: {
+    height: 1,
+    backgroundColor: "gray"
+  },
+  listItemCont: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between"
+  },
+  textInput: {
+    height: 40,
+    padding: viewPadding,
+    borderColor: "lightgrey",
+    borderWidth: 0.5,
+    width: "100%"
+  },
+  containerApp: {
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
@@ -109,11 +195,6 @@ const styles = StyleSheet.create({
   },
   red: {
     color: "red"
-  },
-  item: {
-    padding: 10,
-    fontSize: 18,
-    height: 44
   }
 });
 
