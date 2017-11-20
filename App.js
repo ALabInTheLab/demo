@@ -15,7 +15,7 @@ export default class App extends Component {
         <Names name="Frozen City Savages" />
         <Counting />
         <View style={{ height: 200, flexDirection: "row" }}>
-          <Image source={require("./cat.jpg")} style={{ flex: 3 }} />
+          <Image source={require("./cat.jpg")} style={{ flex: 1 }} />
           <Image source={require("./dog.jpg")} style={{ flex: 1 }} />
         </View>
       </View>;
